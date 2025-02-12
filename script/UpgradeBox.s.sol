@@ -1,9 +1,10 @@
 // SPDX-License-Identifier
-pragma solidity ^0.8.18
+pragma solidity ^0.8.18;
 
 import {Script} from "forge-std/Script.sol";
 import {DevOpsTools} from "foundry-devops/src/DevOpsTools.sol";
 import {BoxV2} from "../src/BoxV2.sol";
+import {BoxV1} from "../src/BoxV1.sol";
 
 contract UpgradeBox is Script {
     function run() external returns (address) {
@@ -19,7 +20,7 @@ contract UpgradeBox is Script {
     function upgradeBox(address proxyAddress, address newBox) public returns (address) {
         vm.startBroadcast();
         BoxV1 proxy = BoxV1(proxyAddress);
-        proxy.upgradeTo(address(newBox)); // proxy contract now points to this new address
+        proxy.upgradeToAndCall(address(newBox), ""); // proxy contract now points to this new address
         vm.stopBroadcast();
         return address(proxy);
     }
